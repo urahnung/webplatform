@@ -1,16 +1,9 @@
-﻿/// @file   Data\IRepository.cs
-///
-/// @brief  Declares the IRepository interface.
-namespace WebPlatform.Core.Data
+﻿namespace WebPlatform.Core.Data
 {
-   /// @interface IRepository<TEntity>
-   ///
-   /// @brief  Interface for repository.  
-   ///
-   /// @author uh
-   /// @date   10.02.2014
-   ///
-   /// @tparam TEntity  Type of the entity.
+   /// <summary>
+   ///   Defines the repository service interface.
+   /// </summary>
+   /// <typeparam name="TEntity">The type of the entity.</typeparam>
    public interface IRepository<TEntity>
       where TEntity : Entity
    {

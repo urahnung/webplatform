@@ -1,7 +1,7 @@
-﻿using Microsoft.Practices.Unity;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Practices.Unity;
 
 namespace WebPlatform.Core.Services
 {
@@ -70,6 +70,7 @@ namespace WebPlatform.Core.Services
             return this;
          }
       }
+
       /// <summary>
       ///   Creates a runtime binding the services of the modules in the specified catalog.
       /// </summary>
@@ -137,14 +138,6 @@ namespace WebPlatform.Core.Services
          return this;
       }
 
-      /// <inheritdoc />
-      protected override void Initialize(IRegistrar registrar)
-      {
-         // registers the runtime as service registrar and service locator
-         registrar.RegisterInstance<IRegistrar>(this);
-         registrar.RegisterInstance<ILocator>(this);
-      }
-
       /// <summary>
       ///   Tries to get a module with the specified name.
       /// </summary>
@@ -159,16 +152,23 @@ namespace WebPlatform.Core.Services
          return module != null;
       }
 
+      /// <inheritdoc />
+      protected override void Initialize(IRegistrar registrar)
+      {
+         // registers the runtime as service registrar and service locator
+         registrar.RegisterInstance<IRegistrar>(this);
+         registrar.RegisterInstance<ILocator>(this);
+      }
+
       /// <summary>
       ///   Performs the module binding.
       /// </summary>
-      private IEnumerable<IModule> Bind()
+      private void Bind()
       {
          foreach (var module in this)
          {
             module.Prepare(this);
          }
-         return this;
       }
    }
 }

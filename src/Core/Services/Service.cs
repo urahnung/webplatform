@@ -1,5 +1,4 @@
-﻿
-namespace WebPlatform.Core.Services
+﻿namespace WebPlatform.Core.Services
 {
    /// <summary>
    ///   Provides the service base implementation.
@@ -19,19 +18,19 @@ namespace WebPlatform.Core.Services
       }
 
       /// <summary>
-      ///   Initializes the service.
-      /// </summary>
-      protected virtual void Initialize()
-      {
-      }
-
-      /// <summary>
       ///   Gets the module.
       /// </summary>
       public TModule Module
       {
          get;
          private set;
+      }
+
+      /// <summary>
+      ///   Initializes the service.
+      /// </summary>
+      protected virtual void Initialize()
+      {
       }
    }
 }

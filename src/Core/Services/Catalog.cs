@@ -8,11 +8,11 @@ namespace WebPlatform.Core.Services
    /// </summary>
    public abstract class Catalog : ICatalog
    {
-      /// <summary>
-      ///   Gets the enumerator to iterate through the module types.
-      /// </summary>
-      /// <returns>The enumerator.</returns>
-      protected abstract IEnumerator<ModuleType> GetEnumerator();
+      /// <inheritdoc />
+      IEnumerator IEnumerable.GetEnumerator()
+      {
+         return this.GetEnumerator();
+      }
 
       /// <inheritdoc />
       IEnumerator<ModuleType> IEnumerable<ModuleType>.GetEnumerator()
@@ -20,10 +20,10 @@ namespace WebPlatform.Core.Services
          return this.GetEnumerator();
       }
 
-      /// <inheritdoc />
-      IEnumerator IEnumerable.GetEnumerator()
-      {
-         return this.GetEnumerator();
-      }
+      /// <summary>
+      ///   Gets the enumerator to iterate through the module types.
+      /// </summary>
+      /// <returns>The enumerator.</returns>
+      protected abstract IEnumerator<ModuleType> GetEnumerator();
    }
 }

@@ -13,6 +13,11 @@ namespace WebPlatform.Core.Services
       bool IsInitialized { get; }
 
       /// <summary>
+      ///   Gets the module name.
+      /// </summary>
+      string Name { [return: NotNull] get; }
+
+      /// <summary>
       ///   Prepares the module.
       /// </summary>
       /// <param name="locator">The service locator.</param>
@@ -22,10 +27,5 @@ namespace WebPlatform.Core.Services
       ///   Terminates the module.
       /// </summary>
       void Terminate();
-
-      /// <summary>
-      ///   Gets the module name.
-      /// </summary>
-      string Name { [return: NotNull] get; }
    }
 }

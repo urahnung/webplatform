@@ -20,6 +20,7 @@
       protected Module()
       {
       }
+
       /// <inheritdoc />
       public bool IsInitialized
       {
@@ -57,4 +58,3 @@
       }
    }
 }
-

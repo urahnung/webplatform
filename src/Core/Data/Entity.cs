@@ -1,22 +1,13 @@
-﻿/// @file   Data\Entity.cs
-///
-/// @brief  Implements the entity class.
-
-namespace WebPlatform.Core.Data
+﻿namespace WebPlatform.Core.Data
 {
-   /// @class  Entity
-   ///
-   /// @brief  The base class for all entities.
-   ///
-   /// @author uh
-   /// @date   10.02.2014
+   /// <summary>
+   ///   Provides a base class implementation for entities.
+   /// </summary>
    public abstract class Entity
    {
-      /// @property  public virtual int Id
-      ///
-      /// @brief  Gets or sets the id.
-      ///
-      /// @return The identifier.
+      /// <summary>
+      /// Gets or sets the identifier.
+      /// </summary>
       public virtual int Id { get; protected set; }
    }
 }

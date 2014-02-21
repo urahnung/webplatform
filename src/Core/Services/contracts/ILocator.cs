@@ -1,5 +1,4 @@
-﻿
-namespace WebPlatform.Core.Services
+﻿namespace WebPlatform.Core.Services
 {
    /// <summary>
    ///   Defines the service locator interface.

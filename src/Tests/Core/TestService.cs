@@ -12,7 +12,7 @@ namespace WebPlatform.Tests.Core
       /// <summary>
       ///   Initializes a new instance of the <see cref="TestService"/> class.
       /// </summary>
-      ///   <param name="module">The test module.</param>
+      /// <param name="module">The test module.</param>
       public TestService(TestModule module)
          : base(module)
       {

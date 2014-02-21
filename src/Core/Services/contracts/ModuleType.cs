@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace WebPlatform.Core.Services
 {
    /// <summary>
-   ///   Represents a moddule type.
+   ///   Represents a module type.
    /// </summary>
    public class ModuleType
    {
@@ -13,6 +13,15 @@ namespace WebPlatform.Core.Services
       /// </summary>
       private ModuleType()
       {
+      }
+
+      /// <summary>
+      ///   Gets the name.
+      /// </summary>
+      public string Name
+      {
+         get;
+         private set;
       }
 
       /// <summary>
@@ -35,21 +44,6 @@ namespace WebPlatform.Core.Services
          return new ModuleType { Type = typeof(TModule), Name = typeof(TModule).Name };
       }
 
-      /// <summary>
-      ///   Gets the name.
-      /// </summary>
-      public string Name
-      {
-         get;
-         private set;
-      }
-
-      /// <ineritdoc />
-      public override int GetHashCode()
-      {
-         return EqualityComparer<Type>.Default.GetHashCode(this.Type);
-      }
-
       /// <ineritdoc />
       public override bool Equals(object value)
       {
@@ -59,6 +53,12 @@ namespace WebPlatform.Core.Services
             return false;
 
          return EqualityComparer<Type>.Default.Equals(this.Type, moduleType.Type);
+      }
+
+      /// <ineritdoc />
+      public override int GetHashCode()
+      {
+         return EqualityComparer<Type>.Default.GetHashCode(this.Type);
       }
    }
 }

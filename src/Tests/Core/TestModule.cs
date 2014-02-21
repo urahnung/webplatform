@@ -8,7 +8,7 @@ namespace WebPlatform.Tests.Core
    public class TestModule : Module
    {
       /// <summary>
-      ///   Initializes a new instance of the <see cref="Module" /> class.
+      ///   Initializes a new instance of the <see cref="TestModule" /> class.
       /// </summary>
       /// <param name="registrar">The service registrar.</param>
       public TestModule(IRegistrar registrar)
@@ -17,20 +17,17 @@ namespace WebPlatform.Tests.Core
       }
 
       /// <inheritdoc />
-      ///   Registers the services.
-      /// </summary>
-      /// <param name="registrar">The registrar.</param>
+      public override void Prepare(ILocator locator)
+      {
+         base.Prepare(locator);
+      }
+
+      /// <inheritdoc />
       protected override void Initialize(IRegistrar registrar)
       {
          base.Initialize(registrar);
 
          registrar.Register<ITestService, TestService>(null);
-      }
-
-      /// <inheritdoc />
-      public override void Prepare(ILocator locator)
-      {
-         base.Prepare(locator);
       }
    }
 }

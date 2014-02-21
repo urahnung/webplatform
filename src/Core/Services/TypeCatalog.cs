@@ -14,8 +14,9 @@ namespace WebPlatform.Core.Services
       private readonly IList<ModuleType> modules;
 
       /// <summary>
-      ///   Prevents a default instance of the <see cref="TypeCatalog"/> class from being created.
+      ///   Prevents a default instance of the <see cref="TypeCatalog" /> class from being created.
       /// </summary>
+      /// <param name="modules">The modules.</param>
       private TypeCatalog(IEnumerable<ModuleType> modules)
       {
          this.modules = modules.ToList();
@@ -39,14 +40,17 @@ namespace WebPlatform.Core.Services
       public TypeCatalog And(params ModuleType[] modules)
       {
          foreach (var module in modules)
+         {
             this.modules.Add(module);
+         }
+
          return this;
       }
 
       /// <inheritdoc />
       protected override IEnumerator<ModuleType> GetEnumerator()
       {
-         return modules.GetEnumerator();
+         return this.modules.GetEnumerator();
       }
    }
 }

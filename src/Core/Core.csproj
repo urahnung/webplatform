@@ -7,8 +7,8 @@
     <ProjectGuid>{3E471417-1396-4910-A298-2D4C786D8B8A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Core</RootNamespace>
-    <AssemblyName>Core</AssemblyName>
+    <RootNamespace>WebPlatform.Core</RootNamespace>
+    <AssemblyName>WebPlatform.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,7 +45,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Entity.cs" />
+    <Compile Include="Data\contracts\IRepository.cs" />
+    <Compile Include="Services\Catalog.cs" />
+    <Compile Include="Services\contracts\ICatalog.cs" />
+    <Compile Include="Services\contracts\IContainer.cs" />
+    <Compile Include="Services\contracts\ILifetime.cs" />
+    <Compile Include="Services\contracts\ILocator.cs" />
+    <Compile Include="Services\contracts\IModule.cs" />
+    <Compile Include="Services\contracts\IRegistrar.cs" />
+    <Compile Include="Services\contracts\IService.cs" />
+    <Compile Include="Services\contracts\ModuleType.cs" />
+    <Compile Include="Services\Lifetime.cs" />
+    <Compile Include="Services\Module.cs" />
+    <Compile Include="Services\Runtime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Service.cs" />
+    <Compile Include="Services\TypeCatalog.cs" />
+    <Compile Include="Validation\NotNullAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

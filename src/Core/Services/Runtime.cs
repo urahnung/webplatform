@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Practices.Unity;
+using System.Linq;
+using Castle.Core;
+using Castle.MicroKernel.Registration;
+using Castle.MicroKernel.Resolvers;
+using Castle.Windsor;
+using WebPlatform.Core.Validation;
 
 namespace WebPlatform.Core.Services
 {
    /// <summary>
    ///   Provides functionality to build a runtime using module services.
    /// </summary>
+   [Provides(typeof(ILocator))]
+   [Provides(typeof(IRegistrar))]
    public class Runtime :
       Module,
       IDisposable,
@@ -18,15 +25,17 @@ namespace WebPlatform.Core.Services
       /// <summary>
       ///   Contains the DI container.
       /// </summary>
-      private UnityContainer container;
+      private WindsorContainer container;
 
       /// <summary>
       ///   Initializes a new instance of the <see cref="Runtime"/> class.
       /// </summary>
       protected Runtime()
       {
-         // creates the unity DI container
-         this.container = new UnityContainer();
+         // creates the windsor DI container
+         this.container = new WindsorContainer();
+         this.container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LazyOfTComponentLoader>());
+
 
          // registers the runtime services
          this.Initialize(this);
@@ -36,17 +45,24 @@ namespace WebPlatform.Core.Services
       ///   Initializes a new instance of the <see cref="Runtime"/> class.
       /// </summary>
       /// <param name="moduleTypes">The module types. Must not be <see langword="null" />.</param>
-      protected Runtime(IEnumerable<ModuleType> moduleTypes)
+      protected Runtime([NotNull] IEnumerable<ModuleType> moduleTypes)
          : this()
       {
          // registers the modules
          foreach (var moduleType in moduleTypes)
-         {
-            this.container.RegisterType(typeof(IModule), moduleType.Type, moduleType.Name, new ContainerControlledLifetimeManager(), new InjectionMember[0]);
-         }
+            this.RegisterModule(moduleType);
 
-         // ensures that the dependencies could be resolved
+         // binds the services
          this.Bind();
+      }
+
+      /// <inheritdoc />
+      IModule IService.Module
+      {
+         get
+         {
+            return this;
+         }
       }
 
       /// <summary>
@@ -54,6 +70,7 @@ namespace WebPlatform.Core.Services
       /// </summary>
       public ILocator Locator
       {
+         [return: NotNull]
          get
          {
             return this;
@@ -61,10 +78,11 @@ namespace WebPlatform.Core.Services
       }
 
       /// <summary>
-      ///   Gets the registrar service.
+      ///   Gets the service registrar.
       /// </summary>
       public IRegistrar Registrar
       {
+         [return: NotNull]
          get
          {
             return this;
@@ -72,11 +90,11 @@ namespace WebPlatform.Core.Services
       }
 
       /// <summary>
-      ///   Creates a runtime binding the services of the modules in the specified catalog.
+      ///   Creates a runtime, binding the services provided through the modules in the specified catalog.
       /// </summary>
       /// <param name="catalog">The module catalog. Must not be <see langword="null"/>.</param>
       /// <returns>The runtime. Never <see langword="null"/>.</returns>
-      public static Runtime With(ICatalog catalog)
+      public static Runtime With([NotNull] ICatalog catalog)
       {
          return new Runtime(catalog);
       }
@@ -91,7 +109,7 @@ namespace WebPlatform.Core.Services
             // terminates the modules
             foreach (var module in this)
             {
-               module.Terminate();
+               module.Terminate(this);
             }
 
             // disposes all services
@@ -103,7 +121,7 @@ namespace WebPlatform.Core.Services
       /// <inheritdoc />
       public IEnumerator<IModule> GetEnumerator()
       {
-         return this.container.ResolveAll<IModule>().GetEnumerator();
+         return this.container.ResolveAll<IModule>().AsEnumerable().GetEnumerator();
       }
 
       /// <inheritdoc />
@@ -125,17 +143,21 @@ namespace WebPlatform.Core.Services
       }
 
       /// <inheritdoc />
-      IRegistrar IRegistrar.Register<TService, TClass>(ILifetime lifetime)
+      void IRegistrar.RegisterInstance<TService>(TService service)
       {
-         this.container.RegisterType<TService, TClass>();
-         return this;
+         this.container.Register(Component.For<TService>().Instance(service).Named(typeof(TService).Name));
       }
 
       /// <inheritdoc />
-      IRegistrar IRegistrar.RegisterInstance<TService>(TService service)
+      void IRegistrar.RegisterSingleton<TService, TClass>()
       {
-         this.container.RegisterInstance<TService>(service);
-         return this;
+         this.container.Register(Component.For<TService>().ImplementedBy<TClass>().LifestyleSingleton());
+      }
+
+      /// <inheritdoc/>
+      void IRegistrar.ReleaseService(IService service)
+      {
+         this.container.Release(service);
       }
 
       /// <summary>
@@ -148,7 +170,7 @@ namespace WebPlatform.Core.Services
       public bool TryGet<TModule>(string name, out TModule module)
          where TModule : IModule
       {
-         module = this.Locator.Resolve<TModule>(name);
+         module = (TModule)this.Locator.Resolve<IModule>(name);
          return module != null;
       }
 
@@ -158,6 +180,8 @@ namespace WebPlatform.Core.Services
          // registers the runtime as service registrar and service locator
          registrar.RegisterInstance<IRegistrar>(this);
          registrar.RegisterInstance<ILocator>(this);
+
+         base.Initialize(registrar);
       }
 
       /// <summary>
@@ -165,10 +189,31 @@ namespace WebPlatform.Core.Services
       /// </summary>
       private void Bind()
       {
+         // prepares all modules
          foreach (var module in this)
          {
             module.Prepare(this);
          }
+
+         // ensure that all abstract services are bound
+         foreach (var handler in container.Kernel.GetAssignableHandlers(typeof(IService)))
+         {
+            if (handler.ComponentModel.LifestyleType == LifestyleType.Undefined)
+               this.container.Resolve(handler.ComponentModel.Services.First());
+         }
+      }
+
+      /// <summary>
+      ///   Registers the specified module.
+      /// </summary>
+      /// <param name="moduleType">The module type. Must not be <see langword="null"/>.</param>
+      private void RegisterModule([NotNull] ModuleType moduleType)
+      {
+         this.container.Register(Component.For(typeof(IModule), moduleType.Type).ImplementedBy(moduleType.Type).Named(moduleType.Name).LifestyleSingleton());
+
+         var serviceTypes = ProvidesAttribute.GetServices(moduleType.Type);
+         if (serviceTypes.Any())
+            this.container.Register(Component.For(serviceTypes).IsFallback());
       }
    }
 }

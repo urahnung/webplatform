@@ -13,19 +13,30 @@ namespace WebPlatform.Core.Services
       bool IsInitialized { get; }
 
       /// <summary>
-      ///   Gets the module name.
+      ///   Gets a value indicating whether the module is prepared.
+      /// </summary>
+      bool IsPrepared { get; }
+
+      /// <summary>
+      ///   Gets a value indicating whether the module is terminated.
+      /// </summary>
+      bool IsTerminated { get; }
+
+      /// <summary>
+      ///   Gets the module name. Never <see langword="null"/>.
       /// </summary>
       string Name { [return: NotNull] get; }
 
       /// <summary>
       ///   Prepares the module.
       /// </summary>
-      /// <param name="locator">The service locator.</param>
-      void Prepare(ILocator locator);
+      /// <param name="locator">The service locator. Must not be <see langword="null"/>.</param>
+      void Prepare([NotNull] ILocator locator);
 
       /// <summary>
       ///   Terminates the module.
       /// </summary>
-      void Terminate();
+      /// <param name="registrar">The service registrar. Must not be <see langword="null"/>.</param>
+      void Terminate([NotNull] IRegistrar registrar);
    }
 }

@@ -1,4 +1,5 @@
-﻿namespace WebPlatform.Core.Services
+﻿using WebPlatform.Core.Validation;
+namespace WebPlatform.Core.Services
 {
    /// <summary>
    ///   Provides a base class implementation for service modules.
@@ -8,8 +9,8 @@
       /// <summary>
       ///   Initializes a new instance of the <see cref="Module" /> class.
       /// </summary>
-      /// <param name="registrar">The service registrar.</param>
-      public Module(IRegistrar registrar)
+      /// <param name="registrar">The service registrar. Must not be <see langword="null"/>.</param>
+      public Module([NotNull] IRegistrar registrar)
       {
          this.Initialize(registrar);
       }
@@ -29,6 +30,20 @@
       }
 
       /// <inheritdoc />
+      public bool IsPrepared
+      {
+         get;
+         private set;
+      }
+
+      /// <inheritdoc />
+      public bool IsTerminated
+      {
+         get;
+         private set;
+      }
+
+      /// <inheritdoc />
       public virtual string Name
       {
          get
@@ -40,19 +55,22 @@
       /// <inheritdoc />
       public virtual void Prepare(ILocator locator)
       {
+         this.IsPrepared = true;
       }
 
       /// <inheritdoc />
-      public virtual void Terminate()
+      public virtual void Terminate(IRegistrar registrar)
       {
          this.IsInitialized = false;
+         this.IsPrepared = false;
+         this.IsTerminated = true;
       }
 
       /// <summary>
       ///   Registers the services.
       /// </summary>
-      /// <param name="registrar">The registrar.</param>
-      protected virtual void Initialize(IRegistrar registrar)
+      /// <param name="registrar">The registrar. Must not be <see langword="null"/>.</param>
+      protected virtual void Initialize([NotNull] IRegistrar registrar)
       {
          this.IsInitialized = true;
       }

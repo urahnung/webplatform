@@ -1,4 +1,5 @@
 ﻿using WebPlatform.Core.Services;
+using WebPlatform.Core.Validation;
 
 namespace WebPlatform.Tests.Core
 {
@@ -6,14 +7,14 @@ namespace WebPlatform.Tests.Core
    ///   Provides a test service implementation.
    /// </summary>
    public class TestService :
-      Service<TestModule>,
+      Service<ProviderModule>,
       ITestService
    {
       /// <summary>
-      ///   Initializes a new instance of the <see cref="TestService"/> class.
+      ///   Initializes a new instance of the <see cref="TestService" /> class.
       /// </summary>
-      /// <param name="module">The test module.</param>
-      public TestService(TestModule module)
+      /// <param name="module">The module. Must not be <see langword="null"/>.</param>
+      public TestService([NotNull] ProviderModule module)
          : base(module)
       {
       }

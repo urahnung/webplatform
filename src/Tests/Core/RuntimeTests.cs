@@ -15,15 +15,23 @@ namespace WebPlatform.Tests.Core
       [TestMethod]
       public void TestRuntimeCreation()
       {
-         using (var runtime = Runtime.With(TypeCatalog.With(ModuleType.For<TestModule>())))
+         var moduleTypes =
+            TypeCatalog.With
+            (
+               ModuleType.For<ConsumerModule>(),
+               ModuleType.For<ProviderModule>()
+            );
+         using (var runtime = Runtime.With(moduleTypes))
          {
             // tries to resolve the test module
-            TestModule testModule;
-            Assert.IsTrue(runtime.TryGet("TestModule", out testModule));
-            Assert.IsTrue(testModule.IsInitialized);
+            ProviderModule providerModule;
+            Assert.IsTrue(runtime.TryGet("ProviderModule", out providerModule));
+            ConsumerModule consumerModule;
+            Assert.IsTrue(runtime.TryGet("ConsumerModule", out consumerModule));
+            Assert.IsTrue(consumerModule.IsInitialized);
 
-            // tries to resolve test service
-            var testService = runtime.Locator.Resolve<ITestService>();
+            Assert.IsNotNull(consumerModule.TestService);
+            Assert.AreSame(runtime.Locator.Resolve<ITestService>(), consumerModule.TestService);
          }
       }
    }

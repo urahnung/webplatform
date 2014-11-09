@@ -1,4 +1,5 @@
-﻿namespace WebPlatform.Core.Services
+﻿using WebPlatform.Core.Validation;
+namespace WebPlatform.Core.Services
 {
    /// <summary>
    ///   Provides the service base implementation.
@@ -8,22 +9,29 @@
       where TModule : IModule
    {
       /// <summary>
-      /// Initializes a new instance of the <see cref="Service{TModule}"/> class.
+      ///   Contains the module.
       /// </summary>
-      /// <param name="module">The module.</param>
-      public Service(TModule module)
+      private readonly TModule module;
+
+      /// <summary>
+      ///   Initializes a new instance of the <see cref="Service{TModule}" /> class.
+      /// </summary>
+      /// <param name="module">The module. Must not be <see langword="null"/>.</param>
+      public Service([NotNull] TModule module)
       {
-         this.Module = module;
+         this.module = module;
          this.Initialize();
       }
 
       /// <summary>
-      ///   Gets the module.
+      ///   Gets or sets the module.
       /// </summary>
       public TModule Module
       {
-         get;
-         private set;
+         get
+         {
+            return this.module;
+         }
       }
 
       /// <summary>
@@ -31,6 +39,16 @@
       /// </summary>
       protected virtual void Initialize()
       {
+      }
+
+      /// <inheritdoc />
+      IModule IService.Module
+      {
+         [return: NotNull]
+         get
+         {
+            return this.Module;
+         }
       }
    }
 }

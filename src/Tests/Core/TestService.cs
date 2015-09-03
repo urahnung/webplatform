@@ -1,4 +1,4 @@
-﻿using WebPlatform.Core.Services;
+﻿using WebPlatform.Core.Composition;
 using WebPlatform.Core.Validation;
 
 namespace WebPlatform.Tests.Core
@@ -6,6 +6,7 @@ namespace WebPlatform.Tests.Core
    /// <summary>
    ///   Provides a test service implementation.
    /// </summary>
+   [Service(Lifetime = Lifetime.Singleton)]
    public class TestService :
       Service<ProviderModule>,
       ITestService

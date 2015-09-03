@@ -1,9 +1,11 @@
-﻿namespace WebPlatform.Core.Data
+﻿using WebPlatform.Core.Composition;
+
+namespace WebPlatform.Core.Data
 {
    /// <summary>
    ///   Defines a connection.
    /// </summary>
-   public interface IConnection
+   public interface IConnection : IService
    {
    }
 }

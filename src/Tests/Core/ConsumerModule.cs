@@ -1,5 +1,5 @@
 ﻿using System;
-using WebPlatform.Core.Services;
+using WebPlatform.Core.Composition;
 using WebPlatform.Core.Validation;
 
 namespace WebPlatform.Tests.Core

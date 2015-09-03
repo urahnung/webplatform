@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WebPlatform.Core.Services;
+using WebPlatform.Core.Composition;
 
 namespace WebPlatform.Tests.Core
 {

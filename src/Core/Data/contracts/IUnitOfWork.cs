@@ -1,4 +1,4 @@
-﻿using WebPlatform.Core.Services;
+﻿using WebPlatform.Core.Composition;
 namespace WebPlatform.Core.Data
 {
    /// <summary>

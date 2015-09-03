@@ -1,4 +1,4 @@
-﻿using WebPlatform.Core.Services;
+﻿using WebPlatform.Core.Composition;
 using WebPlatform.Core.Validation;
 
 namespace WebPlatform.Tests.Core
@@ -6,7 +6,6 @@ namespace WebPlatform.Tests.Core
    /// <summary>
    ///   Provides a module implementation for tests.
    /// </summary>
-   [Provides(typeof(ITestService))]
    public class ProviderModule :
       Module
    {
@@ -17,7 +16,7 @@ namespace WebPlatform.Tests.Core
       public ProviderModule([NotNull] IRegistrar registrar)
          : base(registrar)
       {
-         registrar.RegisterSingleton<ITestService, TestService>();
+         registrar.Register<ITestService, TestService>();
       }
 
       /// <inheritdoc />

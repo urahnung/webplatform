@@ -88,6 +88,7 @@
     <Compile Include="Composition\Runtime.IRegistrar.cs" />
     <Compile Include="Composition\Runtime.cs" />
     <Compile Include="Logging\contracts\ILogger`1.cs" />
+    <Compile Include="Logging\Logging.cs" />
     <Compile Include="Logging\Logger`1.cs" />
     <Compile Include="Logging\LoggingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

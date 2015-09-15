@@ -15,12 +15,11 @@ namespace WebPlatform.Tests.Core
       [TestMethod]
       public void TestRuntimeCreation()
       {
-         var moduleTypes =
-            TypeCatalog.With
-            (
-               ModuleType.For<ConsumerModule>(),
-               ModuleType.For<ProviderModule>()
-            );
+         var moduleTypes = TypeCatalog.With
+         (
+            ModuleType.For<ConsumerModule>(),
+            ModuleType.For<ProviderModule>()
+         );
          using (var runtime = Runtime.With(moduleTypes))
          {
             // tries to resolve the test module

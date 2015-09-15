@@ -15,7 +15,7 @@ namespace WebPlatform.Core.Logging
       where TModule : IModule
    {
       /// <summary>
-      ///   Initializes a new instance of the <see cref="Logger" /> class.
+      ///   Initializes a new instance of the <see cref="Logging" /> class.
       /// </summary>
       /// <param name="module">The module. Must not be <see langword="null" />.</param>
       /// <param name="owner">The owner.</param>

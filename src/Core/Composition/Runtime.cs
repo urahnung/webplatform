@@ -36,6 +36,7 @@ namespace WebPlatform.Core.Composition
 
          // registers the runtime services
          this.container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LazyOfTComponentLoader>());
+         this.Registrar.Register<Runtime>(this);
          this.Registrar.Register<IRegistrar>(this);
          this.Registrar.Register<ILocator>(this);
          this.Initialize();
@@ -48,12 +49,15 @@ namespace WebPlatform.Core.Composition
       protected Runtime([NotNull] IEnumerable<ModuleType> moduleTypes)
          : this()
       {
-         // registers standard modules
+         // registers default modules
          this.RegisterModule(ModuleType.For<LoggingModule>());
 
          // registers the modules
          foreach (var moduleType in moduleTypes)
             this.RegisterModule(moduleType);
+
+         // prepares the runtime
+         this.Prepare(this);
 
          // binds the services
          this.Bind();
@@ -62,18 +66,6 @@ namespace WebPlatform.Core.Composition
       /// <inheritdoc />
       IModule IService.Module
       {
-         get
-         {
-            return this;
-         }
-      }
-
-      /// <summary>
-      ///   Gets the service locator.
-      /// </summary>
-      public ILocator Locator
-      {
-         [return: NotNull]
          get
          {
             return this;
@@ -90,6 +82,15 @@ namespace WebPlatform.Core.Composition
          {
             return this;
          }
+      }
+
+      /// <summary>
+      ///   Gets a default runtime.
+      /// </summary>
+      /// <returns>The runtime. Never <see langword="null"/>.</returns>
+      public static Runtime Default()
+      {
+         return new Runtime(Enumerable.Empty<ModuleType>());
       }
 
       /// <summary>

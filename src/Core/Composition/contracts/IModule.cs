@@ -23,6 +23,11 @@ namespace WebPlatform.Core.Composition
       bool IsTerminated { get; }
 
       /// <summary>
+      ///   Gets the locator. May be <see langword="null"/>.
+      /// </summary>
+      ILocator Locator { get; }
+
+      /// <summary>
       ///   Gets the module name. Never <see langword="null"/>.
       /// </summary>
       string Name {[return: NotNull] get; }

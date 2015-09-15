@@ -65,6 +65,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Core\LoggingTests.cs" />
     <Compile Include="Core\ConsumerModule.cs" />
     <Compile Include="Core\ITestService.cs" />
     <Compile Include="Core\ConnectionTests.cs" />

@@ -9,17 +9,17 @@ namespace WebPlatform.Core.Composition
    public abstract class Module : IModule
    {
       /// <summary>
-      ///   Initializes a new instance of the <see cref="Module"/> class.
-      /// </summary>
-      protected Module()
-      {
-      }
-
-      /// <summary>
       ///   Initializes a new instance of the <see cref="Module" /> class.
       /// </summary>
       /// <param name="registrar">The service registrar. Must not be <see langword="null"/>.</param>
       public Module([NotNull] IRegistrar registrar)
+      {
+      }
+
+      /// <summary>
+      ///   Initializes a new instance of the <see cref="Module"/> class.
+      /// </summary>
+      protected Module()
       {
       }
 
@@ -39,6 +39,13 @@ namespace WebPlatform.Core.Composition
 
       /// <inheritdoc />
       public bool IsTerminated
+      {
+         get;
+         private set;
+      }
+
+      /// <inheritdoc />
+      public ILocator Locator
       {
          get;
          private set;
@@ -67,6 +74,7 @@ namespace WebPlatform.Core.Composition
       {
          if (!this.IsInitialized || this.IsPrepared)
             throw new InvalidOperationException();
+         this.Locator = locator;
          this.IsPrepared = true;
       }
 
@@ -76,6 +84,7 @@ namespace WebPlatform.Core.Composition
          if (!this.IsInitialized)
             throw new InvalidOperationException();
 
+         this.Locator = null;
          this.IsInitialized = false;
          this.IsPrepared = false;
          this.IsTerminated = true;

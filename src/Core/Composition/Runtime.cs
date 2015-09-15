@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core;
+using Castle.MicroKernel.Lifestyle;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers;
 using Castle.Windsor;
+using WebPlatform.Core.Logging;
 using WebPlatform.Core.Validation;
-using Castle.MicroKernel.Lifestyle;
 
 namespace WebPlatform.Core.Composition
 {
@@ -28,14 +29,16 @@ namespace WebPlatform.Core.Composition
       /// <summary>
       ///   Initializes a new instance of the <see cref="Runtime"/> class.
       /// </summary>
-      protected Runtime() 
+      protected Runtime()
       {
          // creates the windsor DI container
          this.container = new WindsorContainer();
-         this.container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LazyOfTComponentLoader>());
 
          // registers the runtime services
-         this.Initialize(this);
+         this.container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LazyOfTComponentLoader>());
+         this.Registrar.Register<IRegistrar>(this);
+         this.Registrar.Register<ILocator>(this);
+         this.Initialize();
       }
 
       /// <summary>
@@ -45,6 +48,9 @@ namespace WebPlatform.Core.Composition
       protected Runtime([NotNull] IEnumerable<ModuleType> moduleTypes)
          : this()
       {
+         // registers standard modules
+         this.RegisterModule(ModuleType.For<LoggingModule>());
+
          // registers the modules
          foreach (var moduleType in moduleTypes)
             this.RegisterModule(moduleType);
@@ -162,21 +168,17 @@ namespace WebPlatform.Core.Composition
          return module != null;
       }
 
-      /// <inheritdoc />
-      protected override void Initialize(IRegistrar registrar)
-      {
-         // registers the runtime as service registrar and service locator
-         registrar.Register<IRegistrar>(this);
-         registrar.Register<ILocator>(this);
-
-         base.Initialize(registrar);
-      }
-
       /// <summary>
       ///   Performs the module binding.
       /// </summary>
       private void Bind()
       {
+         // initialized all modules
+         foreach (var module in this)
+         {
+            module.Initialize();
+         }
+
          // prepares all modules
          foreach (var module in this)
          {

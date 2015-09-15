@@ -25,7 +25,12 @@ namespace WebPlatform.Core.Composition
       /// <summary>
       ///   Gets the module name. Never <see langword="null"/>.
       /// </summary>
-      string Name { [return: NotNull] get; }
+      string Name {[return: NotNull] get; }
+
+      /// <summary>
+      ///   Iniializes the module.
+      /// </summary>
+      void Initialize();
 
       /// <summary>
       ///   Prepares the module.

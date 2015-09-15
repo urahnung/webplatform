@@ -24,11 +24,5 @@ namespace WebPlatform.Tests.Core
       {
          base.Prepare(locator);
       }
-
-      /// <inheritdoc />
-      protected override void Initialize(IRegistrar registrar)
-      {
-         base.Initialize(registrar);
-      }
    }
 }

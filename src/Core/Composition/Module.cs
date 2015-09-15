@@ -1,4 +1,5 @@
-﻿using WebPlatform.Core.Validation;
+﻿using System;
+using WebPlatform.Core.Validation;
 
 namespace WebPlatform.Core.Composition
 {
@@ -20,7 +21,6 @@ namespace WebPlatform.Core.Composition
       /// <param name="registrar">The service registrar. Must not be <see langword="null"/>.</param>
       public Module([NotNull] IRegistrar registrar)
       {
-         this.Initialize(registrar);
       }
 
       /// <inheritdoc />
@@ -54,27 +54,31 @@ namespace WebPlatform.Core.Composition
       }
 
       /// <inheritdoc />
+      public virtual void Initialize()
+      {
+         if (this.IsInitialized || this.IsTerminated)
+            throw new InvalidOperationException();
+
+         this.IsInitialized = true;
+      }
+
+      /// <inheritdoc />
       public virtual void Prepare(ILocator locator)
       {
+         if (!this.IsInitialized || this.IsPrepared)
+            throw new InvalidOperationException();
          this.IsPrepared = true;
       }
 
       /// <inheritdoc />
       public virtual void Terminate(IRegistrar registrar)
       {
+         if (!this.IsInitialized)
+            throw new InvalidOperationException();
+
          this.IsInitialized = false;
          this.IsPrepared = false;
          this.IsTerminated = true;
-      }
-
-      /// <summary>
-      ///   Registers the services.
-      /// </summary>
-      /// <typeparam name="TModule">The type of the module.</typeparam>
-      /// <param name="registrar">The registrar. Must not be <see langword="null" />.</param>
-      protected virtual void Initialize([NotNull] IRegistrar registrar)
-      {
-         this.IsInitialized = true;
       }
    }
 }

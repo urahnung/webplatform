@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Composition\InvalidArgumentException.cs" />
     <Compile Include="Core\Reflector.cs" />
     <Compile Include="Data\Connection.cs" />
     <Compile Include="Data\contracts\IConnection.cs" />

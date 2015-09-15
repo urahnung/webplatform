@@ -58,7 +58,7 @@ namespace WebPlatform.Core.Composition
       IRegistrar IRegistrar.Register(Type serviceType, Type classType)
       {
          if (!typeof(IService).IsAssignableFrom(serviceType))
-            throw new InvalidArgumentException();
+            throw new ArgumentException();
 
          this.Register(Component.For(serviceType).ImplementedBy(classType), serviceType);
          return this;

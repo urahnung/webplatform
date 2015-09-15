@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WebPlatform.Core.Composition;
-using WebPlatform.Core.Data;
 using WebPlatform.Core.Logging;
 
 namespace WebPlatform.Tests.Core
@@ -12,7 +11,7 @@ namespace WebPlatform.Tests.Core
    public class LoggingTests
    {
       /// <summary>
-      ///   Tests to create a connection.
+      ///   Tests to resove a logger.
       /// </summary>
       [TestMethod]
       public void TestResolveLogger()

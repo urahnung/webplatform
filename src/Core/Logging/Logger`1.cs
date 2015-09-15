@@ -17,8 +17,8 @@ namespace WebPlatform.Core.Logging
       /// <summary>
       ///   Initializes a new instance of the <see cref="Logging" /> class.
       /// </summary>
-      /// <param name="module">The module. Must not be <see langword="null" />.</param>
-      /// <param name="owner">The owner.</param>
+      /// <param name="module">The logging module. Must not be <see langword="null" />.</param>
+      /// <param name="owner">The owner module. Must not be <see langword="null"/>.</param>
       public Logger([NotNull]LoggingModule module, [NotNull] TModule owner) : base(module)
       {
          this.Owner = owner;
